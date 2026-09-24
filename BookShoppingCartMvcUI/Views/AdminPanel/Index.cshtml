@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "Admin Panel";
+}
+
+<div style="width:60%;margin:auto" class="mt-5">
+    <h3 class="mb-4">Admin Dashboard</h3>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">📦 Manage Orders</h5>
+                    <p class="card-text">View and update customer orders.</p>
+                    <a href="/UserOrder/Orders" class="btn btn-primary">Go to Orders</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">📚 Manage Books</h5>
+                    <p class="card-text">Add, edit, or remove books.</p>
+                    <a href="/Book/Index" class="btn btn-primary">Go to Books</a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">🏷️ Manage Genres</h5>
+                    <p class="card-text">Add, edit, or remove genres.</p>
+                    <a href="/Genre/Index" class="btn btn-primary">Go to Genres</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">🏆 Top Selling Books</h5>
+            <p class="card-text">See the best selling books.</p>
+            <a href="/Book/TopSelling" class="btn btn-primary">View Report</a>
+        </div>
+    </div>
+</div>
+        @if (User.IsInRole("SuperAdmin"))
+        {
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">👤 Manage Admins</h5>
+                        <p class="card-text">Promote or remove admins.</p>
+                        <a href="/AdminManagement/Index" class="btn btn-primary">Go to Admins</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

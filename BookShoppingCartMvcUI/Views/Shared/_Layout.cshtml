@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EBookStore - Online book store</title>
+    <script type="importmap"></script>
+    <link  rel="stylesheet" href="~/css/bootstrap.min (3).css"  />
+    
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BookShoppingCartMvcUI.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   
+</head>
+<body>
+  <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm px-3">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold fs-4 text-primary d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fa-solid fa-book-open-reader me-2 text-warning"></i> EBookStore
+                </a>
+
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link text-white active px-3" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fa-solid fa-house me-1"></i> Home
+                            </a>
+                        </li>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white-50 px-3" asp-area="" asp-controller="UserOrder" asp-action="UserOrders">
+                                    <i class="fa-solid fa-bag-shopping me-1"></i> My Orders
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-warning fw-bold px-3" asp-area="" asp-controller="AdminPanel" asp-action="Index">
+                                    <i class="fa-solid fa-gauge-high me-1"></i> Admin Panel
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="/Cart/GetUserCart" class="btn btn-outline-light position-relative px-3 rounded-pill">
+                            <i class="fa-solid fa-cart-shopping me-1"></i> Cart
+                            <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger fs-6">
+                                0
+                            </span>
+                        </a>
+
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="d-flex flex-grow-1">
+    @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+    {
+        <partial name="_AdminSidebar" />
+    }
+
+    <main role="main" class="flex-grow-1 p-4">
+        @RenderBody()
+    </main>
+</div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+&copy; 2026 - Designed by <a href="https://www.linkedin.com/in/abdelrahman-sabahy-4728b434b" target="_blank" class="text-decoration-none fw-bold">Eng: Abdelrahman Sabahy</a> - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+<script>
+    loadCartCount();
+    async function loadCartCount(){
+        try{
+            var userNameEL= document.getElementById("userName");
+             var userName = userNameEL ? userNameEL.innerHTML.trim() : "";
+if(userName.length<0){
+window.location.href = "/Identity/Account/Login";
+
+}
+            var response = await fetch(`/Cart/GetTotalItemInCart`);
+            if(response.status==200){
+                var result = await response.json();
+                var cartCountEl = document.getElementById("cartCount");
+                if(cartCountEl) cartCountEl.innerHTML = result;
+            } else {
+                console.log("An error occurred while getting cart count.");
+            }
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</html>

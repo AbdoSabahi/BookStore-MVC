@@ -1,0 +1,53 @@
+﻿@model UpdateOrderStatusModel
+@{
+    ViewData["Title"] = "Update Order Status";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-primary text-white py-3 rounded-top-3">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="fa-solid fa-truck-fast me-2"></i>Update Order Status
+                    </h4>
+                </div>
+
+                <div class="card-body p-4">
+                    <div class="mb-3 p-3 bg-light rounded-2 border">
+                        <span class="text-muted small d-block">Order Reference:</span>
+                        <span class="fw-bold text-primary fs-5">#@Model.OrderId</span>
+                    </div>
+
+                    <form asp-action="UpdateOrderStatus" asp-controller="UserOrder" method="post">
+                        <input type="hidden" asp-for="OrderId" />
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-dark">Select New Status</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="fa-solid fa-list-check"></i></span>
+                                <select asp-for="OrderStatusId" class="form-select">
+                                    <option value="1">Pending</option>
+                                    <option value="2">Shipped</option>
+                                    <option value="3">Delivered</option>
+                                    <option value="4">Cancelled</option>
+                                    <option value="5">Returned</option>
+                                    <option value="6">Refund</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 pt-2 border-top">
+                            <a href="/UserOrder/Orders" class="btn btn-outline-secondary rounded-pill px-4">
+                                <i class="fa-solid fa-xmark me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                                <i class="fa-solid fa-floppy-disk me-1"></i> Update Status
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

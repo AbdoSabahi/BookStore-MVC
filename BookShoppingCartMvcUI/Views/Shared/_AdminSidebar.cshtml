@@ -1,0 +1,49 @@
+﻿<aside class="admin-sidebar bg-secondary text-white p-3 flex-shrink-0" style="
+    width: 250px;
+    height: calc(100vh - 56px);
+    position: sticky;
+    top: 56px;
+    overflow-y: auto;
+    z-index: 1000;">
+
+    <div class="d-flex align-items-center mb-3 text-white text-decoration-none border-bottom pb-3">
+        <i class="fa-solid fa-user-shield me-2 fs-5 text-warning"></i>
+        <span class="fs-5 fw-bold">Admin Panel</span>
+    </div>
+
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="/UserOrder/Orders" class="nav-link text-white">
+                <i class="fa-solid fa-box-archive me-2"></i> Manage Orders
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/Book/Index" class="nav-link text-white">
+                <i class="fa-solid fa-book me-2"></i> Manage Books
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/Genre/Index" class="nav-link text-white">
+                <i class="fa-solid fa-tags me-2"></i> Manage Genres
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/Book/TopSelling" class="nav-link text-white">
+                <i class="fa-solid fa-trophy me-2"></i> Top Selling Books
+            </a>
+        </li>
+        @if (User.IsInRole("SuperAdmin"))
+        {
+            <li class="nav-item">
+                <a href="/AdminManagement/Index" class="nav-link text-white">
+                    <i class="fa-solid fa-users-gear me-2"></i> Manage Admins
+                </a>
+            </li>
+        }
+    </ul>
+
+    <hr class="text-light">
+    <a href="/Home/Index" class="btn btn-outline-light w-100">
+        <i class="fa-solid fa-store me-2"></i> Back to Store
+    </a>
+</aside>

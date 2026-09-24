@@ -1,0 +1,9 @@
+﻿global using System.ComponentModel.DataAnnotations;
+global using BookShoppingCartMvcUI.Constants;
+global using BookShoppingCartMvcUI.Data;
+global using BookShoppingCartMvcUI.Models;
+global using BookShoppingCartMvcUI.Repositories;
+global using BookShoppingCartMvcUI.Models.DTOs;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Identity.UI.Services;
+global using BookShoppingCartMvcUI.Services;

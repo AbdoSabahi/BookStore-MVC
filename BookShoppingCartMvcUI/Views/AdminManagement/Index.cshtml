@@ -1,0 +1,114 @@
+﻿@model IEnumerable<ApplicationUser>
+@{
+    ViewData["Title"] = "Manage Admins";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark mb-1">
+                <i class="fa-solid fa-user-shield text-primary me-2"></i>Manage Admins
+            </h3>
+            <p class="text-muted small mb-0">Add or remove administrator privileges for users.</p>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
+            <i class="fa-solid fa-circle-check me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm mb-4" role="alert">
+            <i class="fa-solid fa-circle-exclamation me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- كارت إضافة أدمن جديد -->
+    <div class="card shadow-sm border-0 rounded-3 mb-4">
+        <div class="card-body p-4">
+            <h5 class="fw-bold text-dark mb-3">Add New Administrator</h5>
+            <form asp-action="MakeAdmin" asp-controller="AdminManagement" method="post">
+                <div class="input-group">
+                    <span class="input-group-text bg-light"><i class="fa-solid fa-envelope"></i></span>
+                    <input type="email" name="email" class="form-control" placeholder="Enter user email" required />
+                    <button type="submit" class="btn btn-primary px-4 shadow-sm">
+                        <i class="fa-solid fa-user-plus me-1"></i> Make Admin
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- كارت جدول المشرفين الحاليين -->
+    <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+        <div class="card-header bg-light py-3 px-4 border-bottom">
+            <h5 class="fw-bold text-dark mb-0">Current Admins</h5>
+        </div>
+        <div class="card-body p-0">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-secondary small">
+                            <tr>
+                                <th class="ps-4">Email</th>
+                                <th class="text-end pe-4" style="width: 200px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var admin in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-semibold text-dark">
+                                        <i class="fa-regular fa-user me-2 text-muted"></i>@admin.Email
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="confirmRemoveAdmin('@admin.Email')">
+                                            <i class="fa-solid fa-user-minus me-1"></i> Remove Admin
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5 my-4">
+                    <div class="mb-3 text-muted opacity-50">
+                        <i class="fa-solid fa-users-slash fa-4x"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">No Admins Found</h5>
+                    <p class="text-muted small">There are no additional administrators assigned.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmRemoveAdmin(email) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Remove admin privileges from this user?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, remove it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/AdminManagement/RemoveAdmin?email=' + encodeURIComponent(email);
+                }
+            });
+        }
+    </script>
+}

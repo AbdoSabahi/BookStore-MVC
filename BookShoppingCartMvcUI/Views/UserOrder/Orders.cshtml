@@ -1,0 +1,140 @@
+﻿@model IEnumerable<Order>
+@{
+    ViewData["Title"] = "All Orders";
+}
+
+<div class="container-fluid py-4 px-md-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark mb-1">
+                <i class="fa-solid fa-boxes-packing text-primary me-2"></i>All Orders (Admin)
+            </h3>
+            <p class="text-muted small mb-0">Manage customer orders, update delivery statuses, and track payment conditions.</p>
+        </div>
+     <a href="/Home/Index" class="btn btn-outline-secondary rounded-pill px-3">
+    <i class="fa-solid fa-house me-1"></i> Home
+</a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
+            <i class="fa-solid fa-circle-check me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Order Date</th>
+                                <th>Customer Name</th>
+                                <th>Contact Info</th>
+                                <th>Address</th>
+                                <th>Payment Status</th>
+                                <th>Order Status</th>
+                                <th class="text-center" style="min-width: 240px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                <tr>
+                                    <td class="fw-semibold text-secondary">
+                                        <i class="fa-regular fa-calendar me-1"></i>
+                                        @order.CreateDate.ToString("dd-MM-yyyy")
+                                    </td>
+                                    <td class="fw-bold text-dark">@order.Name</td>
+                                    <td>
+                                        <div class="small fw-semibold text-dark">@order.Email</div>
+                                        <div class="small text-muted"><i class="fa-solid fa-phone me-1"></i>@order.MobileNumber</div>
+                                    </td>
+                                    <td class="small text-secondary" style="max-width: 200px;">@order.Address</td>
+                                    <td>
+                                        <div class="mb-1 small text-uppercase text-muted fw-bold">@order.PaymentMethod</div>
+                                        @if (order.IsPaid)
+                                        {
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                                <i class="fa-solid fa-circle-check me-1"></i>Paid
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
+                                                <i class="fa-solid fa-circle-xmark me-1"></i>Not Paid
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2 py-1">
+                                            @(order.OrderStatus?.StatusName ?? "Pending")
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group gap-1" role="group">
+                                            <a class="btn btn-outline-info btn-sm rounded" 
+                                               href="/UserOrder/UpdateOrderStatus?orderId=@order.Id" 
+                                               title="Update Order Status">
+                                                <i class="fa-solid fa-pen-to-square"></i> Status
+                                            </a>
+                                            <a class="btn btn-outline-warning btn-sm rounded" 
+                                               href="/UserOrder/TogglePaymentStatus?orderId=@order.Id" 
+                                               title="Toggle Payment Status">
+                                                <i class="fa-solid fa-money-bill-transfer"></i> Toggle Payment
+                                            </a>
+                                            <button type="button" 
+                                                    class="btn btn-outline-danger btn-sm rounded" 
+                                                    onclick="confirmDeleteOrder(@order.Id)">
+                                                <i class="fa-solid fa-trash"></i> Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- شاشة تفاعلية في حال لا يوجد أي طلبات -->
+        <div class="text-center py-5 my-4 bg-light rounded-4 border border-1">
+            <div class="mb-3 text-muted opacity-50">
+                <i class="fa-solid fa-inbox fa-5x"></i>
+            </div>
+            <h4 class="fw-bold text-dark mb-2">No Orders Found</h4>
+            <p class="text-muted mb-0">There are currently no customer orders in the system.</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDeleteOrder(orderId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This action will permanently remove this order from database!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+                customClass: {
+                    popup: 'rounded-4'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/UserOrder/DeleteOrder?orderId=${orderId}`;
+                }
+            });
+        }
+    </script>
+}

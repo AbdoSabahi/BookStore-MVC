@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Order Successful";
+}
+
+<div class="container text-center py-5 my-5">
+    <!-- أيقونة صح خضراء تفاعلية -->
+    <div class="mb-4 text-success">
+        <i class="fa-solid fa-circle-check fa-5x"></i>
+    </div>
+
+    <h2 class="fw-bold text-dark mb-2">Thank you! Your order has been placed successfully.</h2>
+    <p class="fs-5 text-muted mb-4">Order ID: <span class="fw-bold text-primary">#@Model</span></p>
+
+    <div class="d-flex justify-content-center gap-3">
+        <a href="/UserOrder/UserOrders" class="btn btn-outline-primary btn-lg rounded-pill px-4 shadow-sm">
+            <i class="fa-solid fa-bag-shopping me-2"></i> View My Orders
+        </a>
+        <a href="/Home/Index" class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm">
+            <i class="fa-solid fa-cart-shopping me-2"></i> Continue Shopping
+        </a>
+    </div>
+</div>

@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Genre>
+@{
+    ViewData["Title"] = "Manage Genres";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark mb-1">
+                <i class="fa-solid fa-tags text-primary me-2"></i>Manage Genres
+            </h3>
+            <p class="text-muted small mb-0">Add, edit, or remove book categories.</p>
+        </div>
+        <a href="/Genre/AddGenre" class="btn btn-primary rounded-pill px-4 shadow-sm">
+            <i class="fa-solid fa-plus me-2"></i>Add New Genre
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
+            <i class="fa-solid fa-circle-check me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+        <div class="card-body p-0">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-secondary small">
+                            <tr>
+                                <th class="ps-4" style="width: 100px;">ID</th>
+                                <th>Genre Name</th>
+                                <th class="text-end pe-4" style="width: 200px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var genre in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-bold text-muted">#@genre.Id</td>
+                                    <td class="fw-semibold text-dark">@genre.GenreName</td>
+                                    <td class="text-end pe-4">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <a href="/Genre/EditGenre?id=@genre.Id" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                                                <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                                            </a>
+                                           
+                                            <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="confirmDelete(@genre.Id)">
+                                                <i class="fa-solid fa-trash-can me-1"></i> Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5 my-4">
+                    <div class="mb-3 text-muted opacity-50">
+                        <i class="fa-solid fa-folder-open fa-4x"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">No Genres Found</h5>
+                    <p class="text-muted small">Get started by creating your first book genre.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(genreId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                 
+                    window.location.href = '/Genre/DeleteGenre?id=' + genreId;
+                }
+            });
+        }
+    </script>
+}
